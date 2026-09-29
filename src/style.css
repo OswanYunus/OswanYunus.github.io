@@ -1090,3 +1090,13 @@ html[data-dim='noir'] .badge {
     display: none;
   }
 }
+/* touch screens can't hover, so the title glitches by itself now and then */
+@media (hover: none) {
+  .glitch::before {
+    animation: gl1 3.6s steps(2) infinite;
+  }
+  .glitch::after {
+    animation: gl2 3.6s steps(2) infinite;
+    animation-delay: 0.4s;
+  }
+}

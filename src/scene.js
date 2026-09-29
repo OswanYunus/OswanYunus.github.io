@@ -37,7 +37,8 @@ function makeRamp() {
 }
 
 export function initScene(canvas, { reducedMotion = false } = {}) {
-  const motion = reducedMotion ? 0.15 : 1;
+  // Reduced-motion visitors still get gentle movement, just slower and calmer.
+  const motion = reducedMotion ? 0.4 : 1;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -108,7 +109,13 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
   const all = [hero, ...field];
 
   // --- pointer + scroll state ---------------------------------
+  // ndc = where the real pointer is. aim = where the scene "looks", which
+  // follows the real pointer, or a slow automatic path when nobody is moving
+  // one (phones, or a parked mouse).
   const ndc = new THREE.Vector2(0, 0);
+  const aim = new THREE.Vector2(0, 0);
+  const target = new THREE.Vector2(0, 0);
+  let lastMove = -Infinity;
   const raycaster = new THREE.Raycaster();
   const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
   const mouseWorld = new THREE.Vector3();
@@ -120,6 +127,7 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
     (e) => {
       ndc.x = (e.clientX / window.innerWidth) * 2 - 1;
       ndc.y = -((e.clientY / window.innerHeight) * 2 - 1);
+      lastMove = performance.now();
     },
     { passive: true }
   );
@@ -190,17 +198,26 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
     last = now;
     const t = now / 1000;
 
+    // Real pointer if it moved in the last 2.5 seconds, otherwise a slow wander.
+    const idle = now - lastMove > 2500;
+    if (idle) {
+      target.set(Math.sin(t * 0.55) * 0.75, Math.cos(t * 0.42) * 0.5);
+    } else {
+      target.copy(ndc);
+    }
+    aim.lerp(target, 0.05);
+
     scrollSmooth += (scrollTarget - scrollSmooth) * 0.06;
     camera.position.set(
-      Math.sin(scrollSmooth * 6) * 2.5 * motion + ndc.x * 0.6 * motion,
-      2 - scrollSmooth * 4 + ndc.y * 0.4 * motion,
+      Math.sin(scrollSmooth * 6) * 2.5 * motion + aim.x * 0.6 * motion,
+      2 - scrollSmooth * 4 + aim.y * 0.4 * motion,
       14 - Math.sin(scrollSmooth * Math.PI) * 2
     );
     camera.lookAt(0, 0, 0);
     camera.updateMatrixWorld();
 
-    // Where is the pointer on the z = 0 plane? Shapes nearby get pushed away.
-    raycaster.setFromCamera(ndc, camera);
+    // Where is the aim point on the z = 0 plane? Shapes nearby get pushed away.
+    raycaster.setFromCamera(aim, camera);
     raycaster.ray.intersectPlane(plane, mouseWorld);
 
     for (const s of field) {
@@ -210,7 +227,7 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
       const d = Math.hypot(dx, dy) || 0.001;
       let tx = 0;
       let ty = 0;
-      if (d < 4 && motion > 0.5) {
+      if (d < 4 && motion > 0.3) {
         const f = ((4 - d) / 4) * 2.4;
         tx = (dx / d) * f;
         ty = (dy / d) * f;
@@ -234,8 +251,8 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
     hu.boost *= 0.94;
     hu.pop *= 0.9;
     hero.scale.setScalar(hu.size * (1 + hu.pop * 0.35));
-    hero.rotation.y = t * 0.3 * motion + ndc.x * 0.7 + hu.boost * 0.15;
-    hero.rotation.x = t * 0.2 * motion - ndc.y * 0.5;
+    hero.rotation.y = t * 0.3 * motion + aim.x * 0.7 + hu.boost * 0.15;
+    hero.rotation.x = t * 0.2 * motion - aim.y * 0.5;
 
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
