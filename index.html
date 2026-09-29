@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-dim="1610">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oswan Yunus | Full-stack developer and computer science student</title>
+    <meta
+      name="description"
+      content="Portfolio of Oswan Baraka Yunus: a computer science student who builds full-stack web apps, including a live multi-tenant WhatsApp SaaS."
+    />
+    <meta name="theme-color" content="#1a1035" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#work">Skip to projects</a>
+
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="halftone" aria-hidden="true"></div>
+    <aside class="side-hero" aria-hidden="true">
+      <img src="/miles.png" alt="" onerror="this.parentNode.remove()" />
+    </aside>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+
+    <header class="nav">
+      <a class="logo" href="#top" aria-label="Oswan Yunus, back to top">OY</a>
+      <nav aria-label="Sections">
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#journey">Journey</a></li>
+          <li><a href="#beyond">Beyond code</a></li>
+          <li><a href="#games">Games</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="dims" role="group" aria-label="Switch dimension">
+        <button class="dim" type="button" data-dim="1610" data-name="Earth-1610" aria-label="Earth-1610 dimension" aria-pressed="true"></button>
+        <button class="dim" type="button" data-dim="city" data-name="Sky Blue City" aria-label="Sky blue City dimension" aria-pressed="false"></button>
+        <button class="dim" type="button" data-dim="noir" data-name="Noir" aria-label="Noir dimension" aria-pressed="false"></button>
+      </div>
+    </header>
+
+    <main>
+      <noscript>
+        <p class="wrap noscript">This portfolio uses JavaScript. Oswan Yunus: computer science student. GitHub: github.com/OswanYunus</p>
+      </noscript>
+
+      <section id="top" class="hero wrap">
+        <div class="hero-copy">
+          <p class="caption">BSc Computer Science student, graduating 2027</p>
+          <h1 class="title" aria-label="Oswan Yunus">
+            <span class="glitch" data-text="OSWAN" aria-hidden="true">OSWAN</span>
+            <span class="glitch" data-text="YUNUS" aria-hidden="true">YUNUS</span>
+          </h1>
+          <p class="tagline">I build full-stack web apps, mobile apps and 3D experiences, and I am moving into games.</p>
+          <div class="cta-row">
+            <a class="btn" href="#work">See the work</a>
+            <a class="btn alt" href="#games">Play keepy-uppy</a>
+            <button class="btn ghost" id="morph" type="button">Morph the shape</button>
+          </div>
+          <p class="hint">Move your mouse. Click a shape. Switch dimensions in the top bar.</p>
+        </div>
+      </section>
+
+      <section id="about" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Origin story</h2>
+          <div class="about">
+            <div class="panel tilt" style="--r:-1deg;--sh:var(--a)">
+              <div id="bio" class="bio"></div>
+            </div>
+            <dl class="panel facts tilt" id="facts" style="--r:1.2deg;--sh:var(--b)"></dl>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Powers and skills</h2>
+          <div id="skill-groups" class="skill-groups"></div>
+        </div>
+      </section>
+
+      <section id="work" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Missions</h2>
+          <p class="filter-status" id="filter-status" aria-live="polite"></p>
+          <div id="project-grid" class="grid"></div>
+          <div id="more-repos" class="more-repos"></div>
+          <p class="repo-line"><a class="btn small alt" id="gh-link" href="#" target="_blank" rel="noopener">Open my GitHub</a> <span id="repo-count"></span></p>
+        </div>
+      </section>
+
+      <section id="journey" class="sec">
+        <div class="wrap">
+          <h2 class="h2">The journey so far</h2>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </section>
+
+      <section id="beyond" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Off the clock</h2>
+          <p class="lead">Click a card to flip it.</p>
+          <div class="hobbies" id="hobbies"></div>
+        </div>
+      </section>
+
+      <section id="games" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Game dev quest log</h2>
+          <div class="arcade">
+            <div class="panel arcade-info" style="--r:-1deg;--sh:var(--c)">
+              <h3>Keepy-uppy</h3>
+              <p>My first mini-game. Tap the ball to keep it in the air. Where you hit it decides where it goes.</p>
+              <p class="scores">Score <strong id="keepy-score">0</strong> Best <strong id="keepy-best">0</strong></p>
+              <p class="small-note">Keyboard: focus the pitch, then press Space.</p>
+            </div>
+            <canvas id="keepy" class="keepy" aria-label="Keepy-uppy football mini-game"></canvas>
+          </div>
+
+          <div class="quest-wrap">
+            <h3 class="h3">Where I am heading with games</h3>
+            <div class="xp" role="img" aria-label="Quest progress"><i id="xp-fill"></i><span id="xp-label"></span></div>
+            <ul class="quest" id="quest"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="sec">
+        <div class="wrap">
+          <h2 class="h2">Send a signal</h2>
+          <div class="contact">
+            <div class="panel" style="--r:-1deg;--sh:var(--a)">
+              <p>Open to internships, junior roles and interesting projects.</p>
+              <p><a id="mail-link" href="#"></a></p>
+              <p><a href="https://github.com/OswanYunus" target="_blank" rel="noopener">github.com/OswanYunus</a></p>
+            </div>
+            <form class="panel form" id="contact-form" style="--r:1deg;--sh:var(--b)">
+              <label>Your name <input name="name" required autocomplete="name" /></label>
+              <label>Your email <input name="from" type="email" required autocomplete="email" /></label>
+              <label>Message <textarea name="message" rows="4" required></textarea></label>
+              <button class="btn" type="submit">Send message</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built with three.js and Vite. Styled after Into the Spider-Verse. Try the Konami code.</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
